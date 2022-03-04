@@ -1,49 +1,91 @@
-fun main() {
+import fly_behavior.*
+import quack_behavior.*
 
-    var duck = Duck()
-    var red_duck = ReadheadDuck()
-    var marrlad_duck = MarlladDuck()
+open class Duck {
 
-    duck.display()
-    duck.quack()
-    duck.swim()
-
-    red_duck.display()
-    red_duck.quack()
-    red_duck.swim()
-
-    marrlad_duck.display()
-    marrlad_duck.quack()
-    marrlad_duck.swim()
-
-}
-
-open class Duck() {
-
-    fun quack() {
-        println("QUACK!QUACK!QUACK!")
-    }
+    protected var flyBehavior : FlyBehavior = FlyNoWay()
+    protected var quackBehavior : QuackBehavior = MuteQuack()
 
     fun swim() {
         println("swimming...")
     }
+    open fun display(name : String = String()) {
+        print(name)
+    }
+    fun performFly() {
+        flyBehavior.fly()
+    }
+    fun performQuack() {
+        quackBehavior.quack()
+    }
 
-    open fun display() {
-        println("It's Duck")
+    @JvmName("setFlyBehavior1")
+    fun setFlyBehavior(fl : FlyBehavior) {
+        flyBehavior = fl
     }
 }
 
-class ReadheadDuck() : Duck() {
+class ReadHeadDuck : Duck() {
 
-    override fun display() {
-        println("It's ReadheadDuck!")
+    init {
+        flyBehavior = FlyNoWay()
+        quackBehavior = Quack()
     }
+
+    override fun display(name: String) {
+        super.display("Read Head Duck: ")
+    }
+
 }
 
-class MarlladDuck() : Duck() {
+class MallardDuck : Duck() {
 
-    override fun display() {
-        println("It's MarlladDuck!")
+    init {
+        flyBehavior = FlyWithWings()
+        quackBehavior = Quack()
     }
+
+    override fun display(name: String) {
+        print("Mallard Duck: ")
+    }
+
+}
+
+class DecoyDuck : Duck() {
+
+    init {
+        flyBehavior = FlyWithWings()
+        quackBehavior = MuteQuack()
+    }
+
+    override fun display(name: String) {
+        super.display("Decoy Duck: ")
+    }
+
+}
+
+fun main() {
+
+    val readHeadDuck = ReadHeadDuck()
+    val mallardDuck = MallardDuck()
+    val decoyDuck = DecoyDuck()
+
+    readHeadDuck.display()
+    readHeadDuck.performFly()
+    readHeadDuck.performQuack()
+    readHeadDuck.setFlyBehavior(FlyWithWings())
+    readHeadDuck.performFly()
+
+    mallardDuck.display()
+    mallardDuck.performFly()
+    mallardDuck.performQuack()
+    mallardDuck.setFlyBehavior(FlyNoWay())
+    mallardDuck.performFly()
+
+    decoyDuck.display()
+    decoyDuck.performFly()
+    decoyDuck.performQuack()
+    decoyDuck.setFlyBehavior(FlyNoWay())
+    decoyDuck.performFly()
 
 }
