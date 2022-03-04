@@ -1,5 +1,3 @@
-package quack_behavior
-
 interface QuackBehavior {
     fun quack()
 }

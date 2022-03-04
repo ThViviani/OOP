@@ -1,5 +1,3 @@
-package fly_behavior
-
 interface FlyBehavior {
     fun fly()
 }
