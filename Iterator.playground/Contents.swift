@@ -16,7 +16,7 @@ protocol IteratorInterface {
     
     associatedtype Item
     func first() -> Item?
-    func next() -> Item?
+    func next()
     func isDone() -> Bool
     var current: Item? { get }
     
@@ -34,19 +34,35 @@ class LinkedListIterator<T:Equatable>: IteratorInterface {
     typealias Item = T
     
     func first() -> T? {
-        <#code#>
+        return container.getElement(index: 0)
     }
     
-    func next() -> T? {
-        <#code#>
+    func next() {
+        
+        counter += 1
+        
+        if counter >= container.length() {
+            counter = 0
+            current = container.getElement(index: counter)
+        }
+        
+        current = container.getElement(index: counter)
+        
     }
     
     func isDone() -> Bool {
-        <#code#>
+        return counter == container.length() - 1
     }
     
     var current: T?
-    var container: LinkedList<T>?
+    var container: LinkedList<T>
+    var counter: Int
+    
+    init(for list: LinkedList<T>) {
+        self.container = list
+        self.current = list.getElement(index: 0)
+        self.counter = 0
+    }
     
 }
 
@@ -179,7 +195,51 @@ extension LinkedList: Enumerable {
     typealias Iterator = LinkedListIterator<T>
     
     func makeIterator() -> Iterator {
-        <#code#>
+        return Iterator(for: self)
     }
     
 }
+
+struct Music: Equatable {
+    var title: String
+    
+    init(title: String) {
+        self.title = title
+    }
+    
+    func play() {
+        print("Playing: " + title)
+    }
+}
+
+// MARK: Examples
+let playList = LinkedList<Music>()
+playList.push(element: Music(title: "Soft Blade - Ksv"))
+playList.push(element: Music(title: "Soft Blade - Ygoslavskiy groove"))
+playList.push(element: Music(title: "Soft Blade - Silent people"))
+playList.push(element: Music(title: "Soft Blade - Koleni"))
+playList.push(element: Music(title: "Soft Blade - Swamp electro"))
+playList.push(element: Music(title: "Soft Blade - Ne strashno"))
+playList.push(element: Music(title: "Soft Blade - Softic dnb"))
+playList.push(element: Music(title: "Soft Blade - Volca vidra"))
+playList.push(element: Music(title: "Soft Blade - Ruchey"))
+
+var playTrack = playList.makeIterator()
+
+while !playTrack.isDone() {
+    playTrack.current?.play()
+    playTrack.next()
+}
+// OUTPUT:
+//Playing: Soft Blade - Ruchey
+//Playing: Soft Blade - Volca vidra
+//Playing: Soft Blade - Softic dnb
+//Playing: Soft Blade - Ne strashno
+//Playing: Soft Blade - Swamp electro
+//Playing: Soft Blade - Koleni
+//Playing: Soft Blade - Silent people
+//Playing: Soft Blade - Ygoslavskiy groove
+
+
+
+
